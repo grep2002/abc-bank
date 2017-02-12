@@ -4,14 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+	// guarantees single instance of the bank
+//	BANK_INSTANCE;
+	
     private List<Customer> customers;
 
     public Bank() {
         customers = new ArrayList<Customer>();
     }
 
-    public void addCustomer(Customer customer) {
+    public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void addCustomer(Customer customer) {
+		if (this.getCustomers() == null)
+			this.setCustomers(new ArrayList<Customer>());
         customers.add(customer);
+      
     }
 
     public String customerSummary() {
@@ -29,6 +43,8 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
+        if (this.getCustomers() == null || this.getCustomers().isEmpty())
+        		return total;
         for(Customer c: customers)
             total += c.totalInterestEarned();
         return total;
