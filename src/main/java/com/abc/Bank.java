@@ -3,15 +3,11 @@ package com.abc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bank {
+public enum Bank {
 	// guarantees single instance of the bank
-//	BANK_INSTANCE;
+	BANK_INSTANCE;
 	
     private List<Customer> customers;
-
-    public Bank() {
-        customers = new ArrayList<Customer>();
-    }
 
     public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
@@ -24,8 +20,7 @@ public class Bank {
 	public void addCustomer(Customer customer) {
 		if (this.getCustomers() == null)
 			this.setCustomers(new ArrayList<Customer>());
-        customers.add(customer);
-      
+        customers.add(customer);     
     }
 
     public String customerSummary() {
@@ -50,13 +45,4 @@ public class Bank {
         return total;
     }
 
-    public String getFirstCustomer() {
-        try {
-            customers = null;
-            return customers.get(0).getName();
-        } catch (Exception e){
-            e.printStackTrace();
-            return "Error";
-        }
-    }
 }

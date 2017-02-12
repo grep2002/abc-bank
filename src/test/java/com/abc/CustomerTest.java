@@ -22,23 +22,6 @@ public class CustomerTest {
 	}
 	
 	@Test
-	public void deposit() {
-		Account checking = new CheckingAccount(AccountType.CHECKING);
-		Account savings = new SavingsAccount(AccountType.SAVINGS);
-		Account maxi = new MaxiSavingsAccount(AccountType.MAXI_SAVINGS);
-		Customer customer = new Customer("John");
-		customer.openAccount(checking);
-		customer.openAccount(savings);
-		customer.openAccount(maxi);
-		
-		Iterator<Account> i = customer.getAccounts().iterator(); 
-		while(i.hasNext()) {
-			assertNotNull(i.next());
-		}
-
-	}
-	
-	@Test
 	public void statementPerAccount() {
 		Account checking = new CheckingAccount(AccountType.CHECKING);
 		Account savings = new SavingsAccount(AccountType.SAVINGS);
@@ -62,7 +45,7 @@ public class CustomerTest {
 	}
 
     @Test //Test customer statement generation
-    public void testApp(){
+    public void listCustomerWithAccounts(){
 
         Account checkingAccount = new CheckingAccount(AccountType.CHECKING);
         Account savingsAccount = new SavingsAccount(AccountType.SAVINGS);
@@ -90,26 +73,10 @@ public class CustomerTest {
     }
 
     @Test
-    public void testOneAccount(){
-        Customer oscar = new Customer("Oscar");
-        oscar.openAccount(new SavingsAccount(AccountType.SAVINGS)); 
-        assertEquals(1, oscar.getNumberOfAccounts());
-    }
-
-    @Test
     public void testTwoAccount(){
         Customer oscar = new Customer("Oscar");
         oscar.openAccount(new SavingsAccount(AccountType.SAVINGS)); 
         oscar.openAccount(new CheckingAccount(AccountType.CHECKING));  
         assertEquals(2, oscar.getNumberOfAccounts());
     }
-
-/*    @Ignore
-    public void testThreeAcounts() {
-        Customer oscar = new Customer("Oscar");
-        
-                .openAccount(new Account(Account.SAVINGS));
-        oscar.openAccount(new Account(Account.CHECKING));
-        assertEquals(3, oscar.getNumberOfAccounts());
-    }*/
 }

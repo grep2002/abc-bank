@@ -6,77 +6,82 @@ import com.abc.AccountConstants.AccountType;
 
 public abstract class Account {
 
-	// ** private final int accountType;
+	private double balance = 0.0;
 	private final AccountType accountType;
-	public List<Transaction> transactions;
-	final static Object lock = new Object();
+	private List<Transaction> transactions;
+	private final static Object lock = new Object();
 
-	double balance = 0.0;
+	public abstract double interestEarned();
 
-	double getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
+	public AccountType getAccountType() {
+		return accountType;
+	}
+
+	private void setBalance(double balance) {
+		this.balance = balance;
+	}
+
+	/*
+	 * deposit money into the account
+	 */
 	public boolean deposit(double amount) {
 		synchronized (lock) {
 			boolean depositsuccess = false;
-			try {
-				amount = Double.parseDouble(Double.toString(amount));
-				if (amount <= 0.0) {
-					System.out.println("Not a valid deposit amount.");
-					return depositsuccess;
-				}
-				this.setBalance(this.getBalance() + amount);
-				this.getTransactions().add(new Transaction(amount));
-				depositsuccess = true;
-			} catch (NumberFormatException nfe) {
-				System.out.println("Deposit amount is not a number.");
-			}
+
+			amount = Double.parseDouble(Double.toString(amount));
+			if (amount <= 0.0)
+				throw new IllegalArgumentException("deposit amount must be greater than 0");
+			this.setBalance(this.getBalance() + amount);
+			this.getTransactions().add(new Transaction(amount));
+			depositsuccess = true;
+
 			return depositsuccess;
 		}
 	}
 
-	public double withdraw(double amount) {
+	/*
+	 * withdraw money from an account
+	 */
+	public boolean withdraw(double amount) {
+		boolean withdrawsuccess = false;
 		synchronized (lock) {
-			try {
-				amount = Double.parseDouble(Double.toString(amount));
-				if ((amount <= 0.0) || (amount > this.getBalance())) {
-					System.out.println("Not a valid withdrawal amount.");
-					return amount;
-				}
-				this.setBalance(this.getBalance() - amount);
-				this.getTransactions().add(new Transaction(-amount));
-			} catch (NumberFormatException nfe) {
-				System.out.println("Withdrawal amount is not a number.");
-			}
-			return amount;
-		}
-	}
-	
-	public double transfer(double amount, Account to) {
-		synchronized (lock) {
-			try {
-				amount = Double.parseDouble(Double.toString(amount));
-				if ((amount <= 0.0) || (amount > this.getBalance())) {
-					System.out.println("Not a valid withdrawal amount.");
-					return amount;
-				}
-				this.setBalance(this.getBalance() - amount);
-				to.setBalance(to.getBalance() + amount);
-				this.getTransactions().add(new Transaction(-amount));
-				to.getTransactions().add(new Transaction(amount));
-			} catch (NumberFormatException nfe) {
-				System.out.println("Withdrawal amount is not a number.");
-			}
-			return amount;
+
+			amount = Double.parseDouble(Double.toString(amount));
+			if ((amount <= 0.0) || (amount > this.getBalance()))
+				throw new IllegalArgumentException(
+						"amount must be greater than zero and less than current account balance");
+			this.setBalance(this.getBalance() - amount);
+			this.getTransactions().add(new Transaction(-amount));
+
+			return withdrawsuccess;
 		}
 	}
 
-	public void setBalance(double balance) {
-		this.balance = balance;
+	/*
+	 * transfer money between accounts
+	 */
+	public boolean transfer(double amount, Account to) {
+		boolean transfersuccess = false;
+		synchronized (lock) {
+
+			amount = Double.parseDouble(Double.toString(amount));
+			if ((amount <= 0.0) || (amount > this.getBalance()))
+				throw new IllegalArgumentException(
+						"amount must be greater than zero and less than current account balance");
+
+			this.setBalance(this.getBalance() - amount);
+			to.setBalance(to.getBalance() + amount);
+			this.getTransactions().add(new Transaction(-amount));
+			to.getTransactions().add(new Transaction(amount));
+
+			return transfersuccess;
+		}
 	}
 
-	// ** public Account(int accountType) {
 	public Account(AccountType accountType) {
 		this.accountType = accountType;
 		this.transactions = new ArrayList<Transaction>();
@@ -92,8 +97,6 @@ public abstract class Account {
 	 * transactions.add(new Transaction(-amount)); } }
 	 */
 
-	public abstract double interestEarned();
-
 	public double sumTransactions() {
 		return checkIfTransactionsExist(true);
 	}
@@ -103,11 +106,6 @@ public abstract class Account {
 		for (Transaction t : transactions)
 			amount += t.amount;
 		return amount;
-	}
-
-	// ** public int getAccountType() {
-	public AccountType getAccountType() {
-		return accountType;
 	}
 
 	public List<Transaction> getTransactions() {

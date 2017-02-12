@@ -22,11 +22,6 @@ public class Customer {
 		return name;
 	}
 
-	/*
-	 * public Customer openAccount(Account account) { accounts.add(account);
-	 * return this; }
-	 */
-
 	public boolean openAccount(Account account) {
 		if (account != null) {
 			return this.getAccounts().add(account);
@@ -48,7 +43,7 @@ public class Customer {
 
 	public String getStatement() {
 		String statement = null;
-		statement = "Statement for " + name + "\n";
+		statement = "Statement for " + this.getName() + "\n";
 		double total = 0.0;
 		for (Account a : this.getAccounts()) {
 			statement += "\n" + statementForAccount(a) + "\n";
@@ -76,7 +71,7 @@ public class Customer {
 
 		// Now total up all the transactions
 		double total = 0.0;
-		for (Transaction t : a.transactions) {
+		for (Transaction t : a.getTransactions()) {
 			s += "  " + (t.amount < 0 ? "withdrawal" : "deposit") + " " + toDollars(t.amount) + "\n";
 			total += t.amount;
 		}

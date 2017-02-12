@@ -12,6 +12,6 @@ public class CheckingAccount extends Account {
 
 	public double interestEarned() {
 
-		return balance * Rates.CHECKING.getInterestRate();
+		return this.getBalance() * Rates.CHECKING.getInterestRate();
 	}
 }

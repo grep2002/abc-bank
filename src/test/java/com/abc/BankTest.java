@@ -2,17 +2,29 @@ package com.abc;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.abc.AccountConstants.AccountType;
+import com.abc.AccountConstants.AccountType; 
 
 public class BankTest {
     private static final double DOUBLE_DELTA = 1e-15;
-    Bank bank = null;
-       
+	static Bank bank = null; 
+
+	@BeforeClass
+	public static void setUpBankInstance() {
+		bank = Bank.BANK_INSTANCE;
+	}
+
+	@After
+	public void removeCustomers() {
+		bank.getCustomers().clear();
+	}
+	
     @Test
     public void checking_account_interestpaid() {
-        bank = new Bank();
+        
         Account checkingAccount = new CheckingAccount(AccountType.CHECKING);
         Customer bill = new Customer("Bill");
         bank.addCustomer(bill);
@@ -24,7 +36,7 @@ public class BankTest {
 
     @Test
     public void savings_account_interestpaid() {
-        bank = new Bank();
+        
         Account savingAccount = new SavingsAccount(AccountType.SAVINGS);
         Customer matt = new Customer("Matt");
         bank.addCustomer(matt);
@@ -36,7 +48,7 @@ public class BankTest {
 
     @Test
     public void maxi_savings_interestpaid() {
-        bank = new Bank();
+        
         Account maxiAccount = new MaxiSavingsAccount(AccountType.MAXI_SAVINGS);
         Customer dave = new Customer("Dave");
         bank.addCustomer(dave);
@@ -48,7 +60,7 @@ public class BankTest {
 
     @Test
     public void total_interestpaid() {
-    		bank = new Bank();
+    		
         Account checkingAccount = new CheckingAccount(AccountType.CHECKING); 
         Account savingAccount = new SavingsAccount(AccountType.SAVINGS);
         Account maxiAccount = new MaxiSavingsAccount(AccountType.MAXI_SAVINGS);
@@ -67,7 +79,7 @@ public class BankTest {
 
     @Test
     public void listofcustomers() {
-        bank = new Bank();
+        
         Customer john = new Customer("John");
         Customer amos = new Customer("Amos");
         amos.openAccount(new CheckingAccount(AccountType.CHECKING));
