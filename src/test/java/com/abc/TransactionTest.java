@@ -11,8 +11,4 @@ public class TransactionTest {
         assertTrue(t instanceof Transaction);
     }
     
-	@Test
-	public void showTransactionsAndBalances() {
-		
-	}
 }

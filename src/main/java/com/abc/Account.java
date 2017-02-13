@@ -9,7 +9,7 @@ public abstract class Account {
 	private double balance = 0.0;
 	private final AccountType accountType;
 	private List<Transaction> transactions;
-	private final static Object lock = new Object();
+	private final Object lock = new Object();
 
 	public abstract double interestEarned();
 
@@ -87,16 +87,6 @@ public abstract class Account {
 		this.transactions = new ArrayList<Transaction>();
 	}
 
-	/*
-	 * public void deposit(double amount) { if (amount <= 0) { throw new
-	 * IllegalArgumentException("amount must be greater than zero"); } else {
-	 * transactions.add(new Transaction(amount)); } }
-	 * 
-	 * public void withdraw(double amount) { if (amount <= 0) { throw new
-	 * IllegalArgumentException("amount must be greater than zero"); } else {
-	 * transactions.add(new Transaction(-amount)); } }
-	 */
-
 	public double sumTransactions() {
 		return checkIfTransactionsExist(true);
 	}
@@ -104,7 +94,7 @@ public abstract class Account {
 	private double checkIfTransactionsExist(boolean checkAll) {
 		double amount = 0.0;
 		for (Transaction t : transactions)
-			amount += t.amount;
+			amount += t.getAmount();
 		return amount;
 	}
 
